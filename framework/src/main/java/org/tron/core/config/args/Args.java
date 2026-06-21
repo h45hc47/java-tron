@@ -1436,27 +1436,27 @@ public class Args extends CommonParameter {
       eventPluginConfig.setSendQueueLength(sendQueueLength);
     }
 
-    // use event plugin
-    if (!useNativeQueue) {
-      if (config.hasPath(Constant.EVENT_SUBSCRIBE_PATH)) {
-        String pluginPath = config.getString(Constant.EVENT_SUBSCRIBE_PATH);
-        if (StringUtils.isNotEmpty(pluginPath)) {
-          eventPluginConfig.setPluginPath(pluginPath.trim());
-        }
+    // Always parse the event plugin settings so the plugin (e.g. MongoDB) can run
+    // alongside the native ZMQ queue. Activation is decided independently in
+    // EventPluginLoader (useNativeQueue + non-empty pluginPath).
+    if (config.hasPath(Constant.EVENT_SUBSCRIBE_PATH)) {
+      String pluginPath = config.getString(Constant.EVENT_SUBSCRIBE_PATH);
+      if (StringUtils.isNotEmpty(pluginPath)) {
+        eventPluginConfig.setPluginPath(pluginPath.trim());
       }
+    }
 
-      if (config.hasPath(Constant.EVENT_SUBSCRIBE_SERVER)) {
-        String serverAddress = config.getString(Constant.EVENT_SUBSCRIBE_SERVER);
-        if (StringUtils.isNotEmpty(serverAddress)) {
-          eventPluginConfig.setServerAddress(serverAddress.trim());
-        }
+    if (config.hasPath(Constant.EVENT_SUBSCRIBE_SERVER)) {
+      String serverAddress = config.getString(Constant.EVENT_SUBSCRIBE_SERVER);
+      if (StringUtils.isNotEmpty(serverAddress)) {
+        eventPluginConfig.setServerAddress(serverAddress.trim());
       }
+    }
 
-      if (config.hasPath(Constant.EVENT_SUBSCRIBE_DB_CONFIG)) {
-        String dbConfig = config.getString(Constant.EVENT_SUBSCRIBE_DB_CONFIG);
-        if (StringUtils.isNotEmpty(dbConfig)) {
-          eventPluginConfig.setDbConfig(dbConfig.trim());
-        }
+    if (config.hasPath(Constant.EVENT_SUBSCRIBE_DB_CONFIG)) {
+      String dbConfig = config.getString(Constant.EVENT_SUBSCRIBE_DB_CONFIG);
+      if (StringUtils.isNotEmpty(dbConfig)) {
+        eventPluginConfig.setDbConfig(dbConfig.trim());
       }
     }
 
